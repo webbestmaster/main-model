@@ -152,11 +152,17 @@ describe('Main model', function baseModelTest() {
             counter += 100;
         }
 
+        function paramNoPass() {
+            counter += 1000;
+        }
+
+        model.listenTo(otherModel, 'paramNoPass', paramNoPass);
+        model.stopListening(otherModel);
+        otherModel.trigger('paramNoPass');
+
         model.listenTo(otherModel, 'paramOnePass', paramOnePass);
         model.stopListening(otherModel, 'paramOnePass');
         otherModel.trigger('paramOnePass');
-
-        assert(counter === 0);
 
         model.listenTo(otherModel, 'paramTwoPass', paramTwoPass);
         model.listenTo(otherModel, 'paramTwoPass', () => paramTwoPass()); // should add 10
