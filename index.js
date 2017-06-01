@@ -3,11 +3,11 @@
 
 /**
  *
- * @param {object} properties of value
+ * @param {object} attributes of new MainModel instance
  * @return {MainModel} instance
  */
 class MainModel {
-    constructor(properties) {
+    constructor(attributes) {
         console.log('Created Model ->', this.constructor.name);
         console.log(this);
 
@@ -16,8 +16,8 @@ class MainModel {
         model._listeners = {};
         model._attr = {};
 
-        if (properties) {
-            model.set(properties);
+        if (attributes) {
+            model.set(attributes);
         }
     }
 
