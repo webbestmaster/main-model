@@ -167,13 +167,16 @@ class MainModel {
      */
     getListenersByKey(key) {
         const model = this;
+        const listeners = model._listeners;
+        const listenersByKey = listeners[key];
 
-        if (!model._listeners[key]) {
-            model._listeners[key] = [];
-            return model.getListenersByKey(key);
+        if (listenersByKey) {
+            return listenersByKey;
         }
 
-        return this._listeners[key];
+        listeners[key] = [];
+
+        return listeners[key];
     }
 
     // helpers
