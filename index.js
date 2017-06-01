@@ -1,6 +1,11 @@
 /* global module */
 /* eslint-disable no-underscore-dangle */
 
+/**
+ *
+ * @param {object} properties of value
+ * @return {MainModel} instance
+ */
 class MainModel {
     constructor(properties) {
         console.log('Created Model ->', this.constructor.name);
