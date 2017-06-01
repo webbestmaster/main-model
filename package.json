@@ -1,0 +1,33 @@
+{
+  "name": "main-model",
+  "version": "0.0.1",
+  "description": "Main Model",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
+    "test": "mocha ./test/**/*.js",
+    "test-cover": "./test-cover.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webbestmaster/main-model.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webbestmaster/main-model/issues"
+  },
+  "homepage": "https://github.com/webbestmaster/main-model#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "chai": "^4.0.1",
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2"
+  }
+}
