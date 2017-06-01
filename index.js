@@ -8,13 +8,11 @@
  */
 class MainModel {
     constructor(attributes) {
-        console.log('Created Model ->', this.constructor.name);
-        console.log(this);
-
         const model = this;
 
         model._listeners = {};
         model._attr = {};
+        model._listening = [];
 
         if (attributes) {
             model.set(attributes);
@@ -26,6 +24,7 @@ class MainModel {
 
         model._attr = {};
         model.offChange();
+        model.stopListening();
     }
 
     /**
@@ -66,11 +65,11 @@ class MainModel {
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
-    onChange(key, action, context) {
+    onChange(key, action, context = this) {
         const model = this;
         const listeners = model.getListenersByKey(key);
 
-        listeners.push([action, context || model]);
+        listeners.push([action, context]);
 
         return model;
     }
@@ -110,6 +109,88 @@ class MainModel {
         }
 
         allListeners[key] = listenersByKey.filter(listener => listener[0] !== action || listener[1] !== context);
+
+        return model;
+    }
+
+    /**
+     *
+     * @param {MainModel} mainModel - other model to start listen
+     * @param {string} key of value
+     * @param {Function} action was execute
+     * @param {*} [context] of action
+     * @returns {MainModel} instance
+     */
+    listenTo(mainModel, key, action, context = this) {
+        const model = this;
+        const listening = model.getListening();
+
+        listening.push([mainModel, key, action, context]);
+        mainModel.onChange(key, action, context);
+
+        return model;
+    }
+
+    /**
+     * @param {MainModel} [mainModel] - other model to stop listen
+     * @param {string} [key] of value
+     * @param {Function} [action] was execute
+     * @param {*} [context] of action
+     * @return {MainModel} instance
+     */
+    stopListening(mainModel, key, action, context) {
+        const model = this;
+        const argsLength = arguments.length;
+        const listening = model.getListening();
+
+        if (argsLength === 0) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                    model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        if (argsLength === 1) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                listMainModel === mainModel && model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        if (argsLength === 2) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                listMainModel === mainModel && listKey === key &&
+                model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        if (argsLength === 3) {
+            listening.forEach(
+                ([listMainModel, listKey, listAction, listContext]) =>
+                listMainModel === mainModel &&
+                listKey === key &&
+                listAction === action &&
+                model.stopListening(listMainModel, listKey, listAction, listContext)
+            );
+            return model;
+        }
+
+        model._listening = listening.filter(
+            ([listMainModel, listKey, listAction, listContext]) => {
+                if (listMainModel === mainModel &&
+                    listKey === key &&
+                    listAction === action &&
+                    listContext === context) {
+                    mainModel.offChange(listKey, listAction, listContext);
+                    return false;
+                }
+                return true;
+            }
+        );
 
         return model;
     }
@@ -163,6 +244,14 @@ class MainModel {
      */
     getAllListeners() {
         return this._listeners;
+    }
+
+    /**
+     *
+     * @return {*} all listening
+     */
+    getListening() {
+        return this._listening;
     }
 
     /**

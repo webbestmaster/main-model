@@ -51,6 +51,27 @@ describe('Main model', function baseModelTest() {
         assert(changeMyKey.key === 'keyValueChange');
     });
 
+    it('listenTo key/value with/without context', () => {
+        const otherModel = new MainModel();
+        const changeMyKey = {
+            key: ''
+        };
+
+        model.listenTo(otherModel, 'keyValueChange', function onKeyValueChange() {
+            changeMyKey.key = 'keyValueChange';
+            assert(this === model);
+        });
+
+        model.listenTo(otherModel, 'keyValueChange', function onKeyValueChange() {
+            this.key = 'keyValueChange';
+            assert(this === changeMyKey);
+        }, changeMyKey);
+
+        otherModel.set('keyValueChange', 'newKeyValue');
+
+        assert(changeMyKey.key === 'keyValueChange');
+    });
+
     it('onChange passed params', () => {
         model.set('checkParam', 'oldCheckParam');
 
@@ -61,6 +82,20 @@ describe('Main model', function baseModelTest() {
         });
 
         model.set('checkParam', 'newCheckParam');
+    });
+
+    it('listenTo passed params', () => {
+        const otherModel = new MainModel();
+
+        otherModel.set('checkParam', 'oldCheckParam');
+
+        // check passed params
+        model.listenTo(otherModel, 'checkParam', (newValue, oldValue) => {
+            assert(newValue === 'newCheckParam');
+            assert(oldValue === 'oldCheckParam');
+        });
+
+        otherModel.set('checkParam', 'newCheckParam');
     });
 
     it('offChange', () => {
@@ -92,6 +127,42 @@ describe('Main model', function baseModelTest() {
         model.onChange('paramThreePass', () => paramThreePass(), {}); // should add 100
         model.offChange('paramThreePass', paramThreePass, this);
         model.trigger('paramThreePass');
+
+        assert(counter === 210);
+    });
+
+    it('stop listening', () => {
+        const otherModel = new MainModel();
+        let counter = 0;
+
+        function paramOnePass() {
+            counter += 1;
+        }
+
+        function paramTwoPass() {
+            counter += 10;
+        }
+
+        function paramThreePass() {
+            counter += 100;
+        }
+
+        model.listenTo(otherModel, 'paramOnePass', paramOnePass);
+        model.stopListening(otherModel, 'paramOnePass');
+        otherModel.trigger('paramOnePass');
+
+        assert(counter === 0);
+
+        model.listenTo(otherModel, 'paramTwoPass', paramTwoPass);
+        model.listenTo(otherModel, 'paramTwoPass', () => paramTwoPass()); // should add 10
+        model.stopListening(otherModel, 'paramTwoPass', paramTwoPass);
+        otherModel.trigger('paramTwoPass');
+
+        model.listenTo(otherModel, 'paramThreePass', paramThreePass, this);
+        model.listenTo(otherModel, 'paramThreePass', () => paramThreePass()); // should add 100
+        model.listenTo(otherModel, 'paramThreePass', () => paramThreePass(), {}); // should add 100
+        model.stopListening(otherModel, 'paramThreePass', paramThreePass, this);
+        otherModel.trigger('paramThreePass');
 
         assert(counter === 210);
     });
@@ -157,11 +228,16 @@ describe('Main model', function baseModelTest() {
     it('destroy', () => {
         model.set({anyParam: 'anyValue'});
 
+        const otherModel = new MainModel();
+
         model.onChange('anyParam', () => {
+        });
+        model.listenTo(otherModel, 'anyParam', () => {
         });
 
         model.destroy();
 
+        assert.deepEqual(model.getListening(), []);
         assert.deepEqual(model.getAllListeners(), {});
         assert.deepEqual(model.getAllAttributes(), {});
     });
