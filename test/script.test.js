@@ -31,6 +31,11 @@ describe('Main model', function baseModelTest() {
         assert(model.get('key-3') === 3);
     });
 
+    it('trigger onChange', done => {
+        model.onChange('key', () => done());
+        model.set('key', 'value');
+    });
+
     it('onChange key/value with/without context', () => {
         const changeMyKey = {
             key: ''
