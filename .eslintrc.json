@@ -190,7 +190,7 @@
         ],
         "no-undef-init": 1,
         "no-undefined": 1,
-        "no-unused-vars": 0,
+        "no-unused-vars": 1,
         "no-invalid-this": 1,
         "comma-dangle": [
             1,
@@ -244,7 +244,7 @@
             "1tbs",
             {}
         ],
-        "no-console": 0,
+        "no-console": 1,
         "valid-jsdoc": 1,
         "block-scoped-var": 1,
         "default-case": 1,
