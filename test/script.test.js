@@ -230,6 +230,37 @@ describe('Main model', function baseModelTest() {
         assert(shouldBeTrue);
     });
 
+    it('validate', () => {
+        let onValidRun = 0;
+        let onInvalidRun = 0;
+
+        const newValidValue = 3;
+        const newInvalidValue = 7;
+
+        model.setValidation('key',
+            (newValue, oldValue) => newValue < 5,
+            (newValue, oldValue) => {
+                assert(newValue === newValidValue);
+                assert(oldValue === undefined); // eslint-disable-line no-undefined
+                onValidRun += 1;
+            },
+            (newValue, oldValue) => {
+                assert(newValue === newInvalidValue);
+                assert(oldValue === newValidValue);
+                onInvalidRun += 1;
+            });
+
+        model.set('key', newValidValue);
+
+        assert(onValidRun === 1);
+        assert(onInvalidRun === 0);
+
+        model.set('key', newInvalidValue);
+
+        assert(onValidRun === 1);
+        assert(onInvalidRun === 1);
+    });
+
     it('destroy', () => {
         model.set({anyParam: 'anyValue'});
 
