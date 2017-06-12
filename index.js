@@ -118,7 +118,7 @@ class MainModel {
      * @param {string} key - of value
      * @param {Function} test - for new value of key
      * @param {Function} onValid - run if key right
-     * @param {Function} onInvalid - run if key wring
+     * @param {Function} onInvalid - run if key wrong
      * @param {*} [context] of actions
      * @returns {MainModel} instance
      */
