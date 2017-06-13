@@ -4,12 +4,11 @@
 const {assert} = require('chai');
 const MainModel = require('./../index');
 
-describe('Main model', function baseModelTest() {
+describe('Main model', () => {
     let model = null;
 
     beforeEach(() => {
         model = new MainModel();
-        return model;
     });
 
     afterEach(() => model.destroy());
