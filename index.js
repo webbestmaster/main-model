@@ -19,6 +19,9 @@ class MainModel {
         }
     }
 
+    /**
+     * @return {void}
+     */
     destroy() {
         const model = this;
 
@@ -39,7 +42,7 @@ class MainModel {
 
     /**
      *
-     * @param {String} key of value
+     * @param {string} key of value
      * @return {*} saved value
      */
     get(key) {
@@ -61,7 +64,7 @@ class MainModel {
     /**
      *
      * @param {string} key of value
-     * @param {Function} action to execute
+     * @param {function} action to execute
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
@@ -77,7 +80,7 @@ class MainModel {
     /**
      *
      * @param {string} [key] of value
-     * @param {Function} [action] was execute
+     * @param {function} [action] was execute
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
@@ -116,9 +119,9 @@ class MainModel {
     /**
      *
      * @param {string} key - of value
-     * @param {Function} test - for new value of key
-     * @param {Function} onValid - run if key right
-     * @param {Function} onInvalid - run if key wrong
+     * @param {function} test - for new value of key
+     * @param {function} onValid - run if key right
+     * @param {function} onInvalid - run if key wrong
      * @param {*} [context] of actions
      * @returns {MainModel} instance
      */
@@ -140,7 +143,7 @@ class MainModel {
      *
      * @param {MainModel} mainModel - other model to start listen
      * @param {string} key of value
-     * @param {Function} action was execute
+     * @param {function} action was execute
      * @param {*} [context] of action
      * @returns {MainModel} instance
      */
@@ -157,7 +160,7 @@ class MainModel {
     /**
      * @param {MainModel} [mainModel] - other model to stop listen
      * @param {string} [key] of value
-     * @param {Function} [action] was execute
+     * @param {function} [action] was execute
      * @param {*} [context] of action
      * @return {MainModel} instance
      */
@@ -255,7 +258,7 @@ class MainModel {
 
     /**
      *
-     * @return {*} all attributes
+     * @return {object} all attributes
      */
     getAllAttributes() {
         return this._attr;
@@ -263,7 +266,7 @@ class MainModel {
 
     /**
      *
-     * @return {*} all listeners
+     * @return {object} all listeners
      */
     getAllListeners() {
         return this._listeners;
@@ -271,7 +274,7 @@ class MainModel {
 
     /**
      *
-     * @return {*} all listening
+     * @return {*[]} all listening
      */
     getListening() {
         return this._listening;
@@ -280,7 +283,7 @@ class MainModel {
     /**
      *
      * @param {string} key of value
-     * @return {Array} of listeners filtered by key
+     * @return {*[]} of listeners filtered by key
      */
     getListenersByKey(key) {
         const model = this;
