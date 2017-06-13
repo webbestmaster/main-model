@@ -46,6 +46,9 @@ describe('Mediator', () => {
         mediator.subscribe(channelName, getData, context);
 
         mediator.publish(channelName, [data.key1, data.key2]);
+
+        // should not any error
+        mediator.publish('unExistingChannel', () => {});
     });
 
     it('unSubscribe', () => {
@@ -86,5 +89,8 @@ describe('Mediator', () => {
         subscribe(mediator);
         mediator.unSubscribe(channelName, callbackFn, contextFn);
         assert(mediator.channels[channelName].length === 1);
+
+        // should not any error
+        mediator.unSubscribe('unExistingChannel', () => {});
     });
 });
