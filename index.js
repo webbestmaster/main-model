@@ -51,7 +51,7 @@ class MainModel {
 
     /**
      *
-     * @param {String} key of value
+     * @param {string} key of value
      * @return {MainModel} instance
      */
     unset(key) {
