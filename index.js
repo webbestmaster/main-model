@@ -51,6 +51,18 @@ class MainModel {
 
     /**
      *
+     * @param {String} key of value
+     * @return {MainModel} instance
+     */
+    unset(key) {
+        const model = this;
+
+        Reflect.deleteProperty(model._attr, key);
+        return model;
+    }
+
+    /**
+     *
      * @param {string} key of value
      * @param {number} deltaValue to change current value
      * @return {MainModel} instance

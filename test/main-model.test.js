@@ -30,6 +30,17 @@ describe('Main model', () => {
         assert(model.get('key-3') === 3);
     });
 
+    it('unset', () => {
+        model.set('key', 'value');
+        assert(model.get('key') === 'value');
+
+        model.unset('key');
+
+        const attributes = model.getAllAttributes();
+
+        assert(attributes.hasOwnProperty('key') === false);
+    });
+
     it('trigger onChange', done => {
         model.onChange('key', () => done());
         model.set('key', 'value');
