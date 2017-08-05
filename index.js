@@ -1,5 +1,5 @@
 /* global module */
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, prefer-reflect */
 
 /**
  *
@@ -57,7 +57,8 @@ class MainModel {
     unset(key) {
         const model = this;
 
-        Reflect.deleteProperty(model._attr, key);
+        // Reflect.deleteProperty(model._attr, key);
+        delete model._attr[key];
         return model;
     }
 
@@ -143,9 +144,14 @@ class MainModel {
         model.onChange(key, (newValue, oldValue) => {
             const args = [newValue, oldValue];
 
+/*
             return Reflect.apply(test, context, args) ?
                 Reflect.apply(onValid, context, args) :
                 Reflect.apply(onInvalid, context, args);
+*/
+            return test.apply(context, args) ?
+                onValid.apply(context, args) :
+                onInvalid.apply(context, args);
         }, context);
 
         return model;
@@ -263,7 +269,8 @@ class MainModel {
             newValueArg = newValue;
         }
 
-        listeners.forEach(listenerData => Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]));
+        // listeners.forEach(listenerData => Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]));
+        listeners.forEach(listenerData => listenerData[0].call(listenerData[1], newValueArg, oldValueArg));
 
         return model;
     }
