@@ -10,6 +10,7 @@ flow-typed/npm
 # dist
 /dist/
 /prod/
+/old/
 
 # res
 /_res
