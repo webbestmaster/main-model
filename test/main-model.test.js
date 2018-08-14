@@ -5,7 +5,7 @@
 
 import assert from 'assert';
 
-const MainModel = require('./../src');
+import MainModel from './../src';
 
 type MainModelPropsType =
     | 'prop'

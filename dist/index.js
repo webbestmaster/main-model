@@ -1,5 +1,9 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _apply = require('babel-runtime/core-js/reflect/apply');
 
 var _apply2 = _interopRequireDefault(_apply);
@@ -511,4 +515,4 @@ var MainModel = function () {
 
 /* eslint consistent-this: ["error", "model"] */
 
-module.exports = MainModel;
+exports.default = MainModel;

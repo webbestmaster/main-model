@@ -31,7 +31,7 @@ type AttrType<KeyNameType, ValueType> = {[key: KeyNameType]: ValueType};
  * @param {object} attributes of new MainModel instance
  * @return {MainModel} instance
  */
-class MainModel<KeyNameType: string, ValueType> {
+export default class MainModel<KeyNameType: string, ValueType> {
     attr: AttrType<KeyNameType, ValueType>;
     listeners: ListenersType<KeyNameType, ValueType>;
     listening: ListeningType<MainModel<KeyNameType, ValueType>, KeyNameType, ActionType<ValueType>, {}>;
@@ -465,5 +465,3 @@ class MainModel<KeyNameType: string, ValueType> {
     }
     */
 }
-
-module.exports = MainModel;
