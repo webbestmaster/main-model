@@ -4,25 +4,11 @@
 # npm
 node_modules
 
-# flow
-flow-typed/npm
-
-# dist
-/dist/
-/prod/
-
-# res
-/_res
-
-# reports
-/flow-coverage
+# test
+/reports-cover/
 
 # example
-
-# /* eslint consistent-this: ["error", "unit", "aggressor"] */
-
 # /* eslint-disable no-unused-vars */
 # var React = require('react');
 # /* eslint-enable no-unused-vars */
-
 # var React = require('react'); // eslint-disable-line no-unused-vars
