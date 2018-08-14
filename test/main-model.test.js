@@ -4,17 +4,28 @@
 /* eslint no-invalid-this: 0 */
 
 import assert from 'assert';
+
 const MainModel = require('./../src');
 
+type MainModelPropsType =
+    | 'prop'
+    | 'anyParam'
+    | 'props'
+    | 'key'
+    | 'key-1'
+    | 'key-2'
+    | 'key-3'
+    | 'triggerParam'
+    | 'keyValueChange';
+
 describe('Main model', () => {
-    let model: MainModel<'prop' | 'anyParam' | 'props' | 'key' | 'key-1' | 'key-2' | 'key-3' | 'triggerParam',
-        string | number> = new MainModel();
+    let model: MainModel<MainModelPropsType, string | number> = new MainModel();
 
     beforeEach(() => {
         model = new MainModel();
     });
 
-    afterEach(() => model.destroy());
+    afterEach((): void => model.destroy());
 
     it('constructor', () => {
         model = new MainModel('prop', 'value');
@@ -44,8 +55,8 @@ describe('Main model', () => {
         assert(attributes.hasOwnProperty('key') === false);
     });
 
-    it('trigger onChange', done => {
-        model.onChange('key', () => done());
+    it('trigger onChange', (done: () => void) => {
+        model.onChange('key', (): void => done());
         model.set('key', 'value');
     });
 
@@ -103,7 +114,7 @@ describe('Main model', () => {
         model.set('checkParam', 'oldCheckParam');
 
         // check passed params
-        model.onChange('checkParam', (newValue, oldValue) => {
+        model.onChange('checkParam', (newValue: string, oldValue: string) => {
             assert(newValue === 'newCheckParam');
             assert(oldValue === 'oldCheckParam');
         });
@@ -117,7 +128,7 @@ describe('Main model', () => {
         otherModel.set('checkParam', 'oldCheckParam');
 
         // check passed params
-        model.listenTo(otherModel, 'checkParam', (newValue, oldValue) => {
+        model.listenTo(otherModel, 'checkParam', (newValue: string, oldValue: string) => {
             assert(newValue === 'newCheckParam');
             assert(oldValue === 'oldCheckParam');
         });
@@ -145,19 +156,20 @@ describe('Main model', () => {
         model.trigger('paramOnePass');
 
         model.onChange('paramTwoPass', paramTwoPass);
-        model.onChange('paramTwoPass', () => paramTwoPass()); // should add 10
+        model.onChange('paramTwoPass', (): void => paramTwoPass()); // should add 10
         model.offChange('paramTwoPass', paramTwoPass);
         model.trigger('paramTwoPass');
 
         model.onChange('paramThreePass', paramThreePass, this);
-        model.onChange('paramThreePass', () => paramThreePass()); // should add 100
-        model.onChange('paramThreePass', () => paramThreePass(), {}); // should add 100
+        model.onChange('paramThreePass', (): void => paramThreePass()); // should add 100
+        model.onChange('paramThreePass', (): void => paramThreePass(), {}); // should add 100
         model.offChange('paramThreePass', paramThreePass, this);
         model.trigger('paramThreePass');
 
         assert(counter === 210);
     });
 
+    // eslint-disable-next-line max-statements
     it('stop listening', () => {
         const otherModel = new MainModel();
         let counter = 0;
@@ -187,13 +199,13 @@ describe('Main model', () => {
         otherModel.trigger('paramOnePass');
 
         model.listenTo(otherModel, 'paramTwoPass', paramTwoPass);
-        model.listenTo(otherModel, 'paramTwoPass', () => paramTwoPass()); // should add 10
+        model.listenTo(otherModel, 'paramTwoPass', (): void => paramTwoPass()); // should add 10
         model.stopListening(otherModel, 'paramTwoPass', paramTwoPass);
         otherModel.trigger('paramTwoPass');
 
         model.listenTo(otherModel, 'paramThreePass', paramThreePass, this);
-        model.listenTo(otherModel, 'paramThreePass', () => paramThreePass()); // should add 100
-        model.listenTo(otherModel, 'paramThreePass', () => paramThreePass(), {}); // should add 100
+        model.listenTo(otherModel, 'paramThreePass', (): void => paramThreePass()); // should add 100
+        model.listenTo(otherModel, 'paramThreePass', (): void => paramThreePass(), {}); // should add 100
         model.stopListening(otherModel, 'paramThreePass', paramThreePass, this);
         otherModel.trigger('paramThreePass');
 
@@ -205,7 +217,7 @@ describe('Main model', () => {
 
         model.set('triggerParam', triggerValue);
 
-        model.onChange('triggerParam', (newValue, oldValue) => {
+        model.onChange('triggerParam', (newValue: string, oldValue: string) => {
             assert(newValue === triggerValue);
             assert(oldValue === triggerValue);
         });
@@ -219,7 +231,7 @@ describe('Main model', () => {
 
         model.set('triggerParam', triggerValue);
 
-        model.onChange('triggerParam', (newValue, oldValue) => {
+        model.onChange('triggerParam', (newValue: string, oldValue: string) => {
             assert(newValue === triggerNewValue);
             assert(oldValue === triggerValue);
         });
@@ -234,7 +246,7 @@ describe('Main model', () => {
 
         model.set('triggerParam', triggerValue);
 
-        model.onChange('triggerParam', (newValue, oldValue) => {
+        model.onChange('triggerParam', (newValue: string, oldValue: string) => {
             assert(newValue === triggerNewValue);
             assert(oldValue === triggerOldValue);
         });
@@ -267,13 +279,13 @@ describe('Main model', () => {
 
         model.setValidation(
             'key',
-            (newValue, oldValue) => newValue < 5,
-            (newValue, oldValue) => {
+            (newValue: number, oldValue: number): boolean => newValue < 5,
+            (newValue: number, oldValue: number) => {
                 assert(newValue === newValidValue);
                 assert(oldValue === undefined); // eslint-disable-line no-undefined
                 onValidRun += 1;
             },
-            (newValue, oldValue) => {
+            (newValue: number, oldValue: number) => {
                 assert(newValue === newInvalidValue);
                 assert(oldValue === newValidValue);
                 onInvalidRun += 1;
@@ -296,8 +308,10 @@ describe('Main model', () => {
 
         const otherModel = new MainModel();
 
-        model.onChange('anyParam', () => {});
-        model.listenTo(otherModel, 'anyParam', () => {});
+        // eslint-disable-next-line lodash/prefer-noop
+        model.onChange('anyParam', (): {} => {});
+        // eslint-disable-next-line lodash/prefer-noop
+        model.listenTo(otherModel, 'anyParam', (): {} => {});
 
         model.destroy();
 

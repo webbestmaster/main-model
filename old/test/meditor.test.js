@@ -22,13 +22,12 @@ describe('Mediator', () => {
     it('subscribe', () => {
         const channelName = 'myChannel';
 
-        mediator.subscribe(channelName, () => {
-        });
+        mediator.subscribe(channelName, () => {});
 
         assert(mediator.channels[channelName].length === 1);
     });
 
-    it('publish', done => {
+    it('publish', (done) => {
         const channelName = 'coordinates';
         const context = {};
         const data = {
@@ -68,7 +67,6 @@ describe('Mediator', () => {
         // unSubscribe from all channels
         mediator.unSubscribe();
         assert(mediator.channels[channelName].length === 0);
-
 
         // unSubscribe from one channels
         subscribe(mediator);

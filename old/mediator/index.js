@@ -56,7 +56,7 @@ class Mediator {
         const {channels} = mediator;
 
         if (!channel) {
-            Object.keys(channels).forEach(channelName => mediator.unSubscribe(channelName));
+            Object.keys(channels).forEach((channelName) => mediator.unSubscribe(channelName));
             return mediator;
         }
 
@@ -70,17 +70,17 @@ class Mediator {
         }
 
         if (callback !== null && context === null) {
-            channels[channel] = channels[channel].filter(item => item[0] !== callback);
+            channels[channel] = channels[channel].filter((item) => item[0] !== callback);
             return mediator;
         }
 
         if (callback === null && context !== null) {
-            channels[channel] = channels[channel].filter(item => item[1] !== context);
+            channels[channel] = channels[channel].filter((item) => item[1] !== context);
             return mediator;
         }
 
-        channels[channel] = channels[channel].filter(([channelCallback, channelContext]) =>
-            channelCallback !== callback || channelContext !== context
+        channels[channel] = channels[channel].filter(
+            ([channelCallback, channelContext]) => channelCallback !== callback || channelContext !== context
         );
 
         return mediator;

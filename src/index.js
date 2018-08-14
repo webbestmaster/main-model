@@ -90,6 +90,38 @@ class MainModel<KeyNameType: string, ValueType> {
     /**
      *
      * @param {string} key of value
+     * @param {number} deltaValue to change current value
+     * @return {MainModel} instance
+     */
+    changeBy(key: KeyNameType, deltaValue: ValueType): this {
+        const model = this;
+
+        const currentValue = model.get(key);
+
+        if (isNumber(currentValue) && isNumber(deltaValue)) {
+            return model.setKeyValue(key, currentValue + deltaValue);
+        }
+
+        console.error('delta and value should be number');
+
+        return model;
+    }
+
+    /**
+     *
+     * @param {string} key of value
+     * @return {MainModel} instance
+     */
+    unset(key: KeyNameType): this {
+        const model = this;
+
+        Reflect.deleteProperty(model.attr, key);
+        return model;
+    }
+
+    /**
+     *
+     * @param {string} key of value
      * @param {function} action to execute
      * @param {*} [context] of action
      * @return {MainModel} instance

@@ -120,11 +120,11 @@ class MainModel {
 
         // context did not passed
         if (argsLength === 2) {
-            allListeners[key] = listenersByKey.filter(listener => listener[0] !== action);
+            allListeners[key] = listenersByKey.filter((listener) => listener[0] !== action);
             return model;
         }
 
-        allListeners[key] = listenersByKey.filter(listener => listener[0] !== action || listener[1] !== context);
+        allListeners[key] = listenersByKey.filter((listener) => listener[0] !== action || listener[1] !== context);
 
         return model;
     }
@@ -141,18 +141,20 @@ class MainModel {
     setValidation(key, test, onValid, onInvalid, context = this) {
         const model = this;
 
-        model.onChange(key, (newValue, oldValue) => {
-            const args = [newValue, oldValue];
+        model.onChange(
+            key,
+            (newValue, oldValue) => {
+                const args = [newValue, oldValue];
 
-/*
+                /*
             return Reflect.apply(test, context, args) ?
                 Reflect.apply(onValid, context, args) :
                 Reflect.apply(onInvalid, context, args);
 */
-            return test.apply(context, args) ?
-                onValid.apply(context, args) :
-                onInvalid.apply(context, args);
-        }, context);
+                return test.apply(context, args) ? onValid.apply(context, args) : onInvalid.apply(context, args);
+            },
+            context
+        );
 
         return model;
     }
@@ -188,9 +190,8 @@ class MainModel {
         const listening = model.getListening();
 
         if (argsLength === 0) {
-            listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]) =>
-                    model.stopListening(listMainModel, listKey, listAction, listContext)
+            listening.forEach(([listMainModel, listKey, listAction, listContext]) =>
+                model.stopListening(listMainModel, listKey, listAction, listContext)
             );
             return model;
         }
@@ -198,7 +199,7 @@ class MainModel {
         if (argsLength === 1) {
             listening.forEach(
                 ([listMainModel, listKey, listAction, listContext]) =>
-                listMainModel === mainModel && model.stopListening(listMainModel, listKey, listAction, listContext)
+                    listMainModel === mainModel && model.stopListening(listMainModel, listKey, listAction, listContext)
             );
             return model;
         }
@@ -206,8 +207,9 @@ class MainModel {
         if (argsLength === 2) {
             listening.forEach(
                 ([listMainModel, listKey, listAction, listContext]) =>
-                listMainModel === mainModel && listKey === key &&
-                model.stopListening(listMainModel, listKey, listAction, listContext)
+                    listMainModel === mainModel &&
+                    listKey === key &&
+                    model.stopListening(listMainModel, listKey, listAction, listContext)
             );
             return model;
         }
@@ -215,26 +217,21 @@ class MainModel {
         if (argsLength === 3) {
             listening.forEach(
                 ([listMainModel, listKey, listAction, listContext]) =>
-                listMainModel === mainModel &&
-                listKey === key &&
-                listAction === action &&
-                model.stopListening(listMainModel, listKey, listAction, listContext)
+                    listMainModel === mainModel &&
+                    listKey === key &&
+                    listAction === action &&
+                    model.stopListening(listMainModel, listKey, listAction, listContext)
             );
             return model;
         }
 
-        model._listening = listening.filter(
-            ([listMainModel, listKey, listAction, listContext]) => {
-                if (listMainModel === mainModel &&
-                    listKey === key &&
-                    listAction === action &&
-                    listContext === context) {
-                    mainModel.offChange(listKey, listAction, listContext);
-                    return false;
-                }
-                return true;
+        model._listening = listening.filter(([listMainModel, listKey, listAction, listContext]) => {
+            if (listMainModel === mainModel && listKey === key && listAction === action && listContext === context) {
+                mainModel.offChange(listKey, listAction, listContext);
+                return false;
             }
-        );
+            return true;
+        });
 
         return model;
     }
@@ -270,7 +267,7 @@ class MainModel {
         }
 
         // listeners.forEach(listenerData => Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]));
-        listeners.forEach(listenerData => listenerData[0].call(listenerData[1], newValueArg, oldValueArg));
+        listeners.forEach((listenerData) => listenerData[0].call(listenerData[1], newValueArg, oldValueArg));
 
         return model;
     }
@@ -323,7 +320,7 @@ class MainModel {
     _setObject(obj) {
         const model = this;
 
-        Object.keys(obj).forEach(key => model._setKeyValue(key, obj[key]));
+        Object.keys(obj).forEach((key) => model._setKeyValue(key, obj[key]));
 
         return model;
     }

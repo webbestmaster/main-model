@@ -41,7 +41,7 @@ describe('Main model', () => {
         assert(attributes.hasOwnProperty('key') === false);
     });
 
-    it('trigger onChange', done => {
+    it('trigger onChange', (done) => {
         model.onChange('key', () => done());
         model.set('key', 'value');
     });
@@ -56,10 +56,14 @@ describe('Main model', () => {
             assert(this === model);
         });
 
-        model.onChange('keyValueChange', function onKeyValueChange() {
-            this.key = 'keyValueChange';
-            assert(this === changeMyKey);
-        }, changeMyKey);
+        model.onChange(
+            'keyValueChange',
+            function onKeyValueChange() {
+                this.key = 'keyValueChange';
+                assert(this === changeMyKey);
+            },
+            changeMyKey
+        );
 
         model.set('keyValueChange', 'newKeyValue');
 
@@ -77,10 +81,15 @@ describe('Main model', () => {
             assert(this === model);
         });
 
-        model.listenTo(otherModel, 'keyValueChange', function onKeyValueChange() {
-            this.key = 'keyValueChange';
-            assert(this === changeMyKey);
-        }, changeMyKey);
+        model.listenTo(
+            otherModel,
+            'keyValueChange',
+            function onKeyValueChange() {
+                this.key = 'keyValueChange';
+                assert(this === changeMyKey);
+            },
+            changeMyKey
+        );
 
         otherModel.set('keyValueChange', 'newKeyValue');
 
@@ -253,7 +262,8 @@ describe('Main model', () => {
         const newValidValue = 3;
         const newInvalidValue = 7;
 
-        model.setValidation('key',
+        model.setValidation(
+            'key',
             (newValue, oldValue) => newValue < 5,
             (newValue, oldValue) => {
                 assert(newValue === newValidValue);
@@ -264,7 +274,8 @@ describe('Main model', () => {
                 assert(newValue === newInvalidValue);
                 assert(oldValue === newValidValue);
                 onInvalidRun += 1;
-            });
+            }
+        );
 
         model.set('key', newValidValue);
 
@@ -282,10 +293,8 @@ describe('Main model', () => {
 
         const otherModel = new MainModel();
 
-        model.onChange('anyParam', () => {
-        });
-        model.listenTo(otherModel, 'anyParam', () => {
-        });
+        model.onChange('anyParam', () => {});
+        model.listenTo(otherModel, 'anyParam', () => {});
 
         model.destroy();
 
