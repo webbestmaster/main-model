@@ -16,10 +16,18 @@ type MainModelPropsType =
     | 'key-2'
     | 'key-3'
     | 'triggerParam'
+    | 'checkParam'
+    | 'paramOnePass'
+    | 'paramTwoPass'
+    | 'paramThreePass'
+    | 'paramNoPass'
     | 'keyValueChange';
 
+type MainModelValueType = string | number;
+type MainModelTrigeredValueType = MainModelValueType | void;
+
 describe('Main model', () => {
-    let model: MainModel<MainModelPropsType, string | number> = new MainModel();
+    let model: MainModel<MainModelPropsType, MainModelValueType> = new MainModel();
 
     beforeEach(() => {
         model = new MainModel();
@@ -114,7 +122,7 @@ describe('Main model', () => {
         model.set('checkParam', 'oldCheckParam');
 
         // check passed params
-        model.onChange('checkParam', (newValue: string, oldValue: string) => {
+        model.onChange('checkParam', (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
             assert(newValue === 'newCheckParam');
             assert(oldValue === 'oldCheckParam');
         });
@@ -128,10 +136,14 @@ describe('Main model', () => {
         otherModel.set('checkParam', 'oldCheckParam');
 
         // check passed params
-        model.listenTo(otherModel, 'checkParam', (newValue: string, oldValue: string) => {
-            assert(newValue === 'newCheckParam');
-            assert(oldValue === 'oldCheckParam');
-        });
+        model.listenTo(
+            otherModel,
+            'checkParam',
+            (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
+                assert(newValue === 'newCheckParam');
+                assert(oldValue === 'oldCheckParam');
+            }
+        );
 
         otherModel.set('checkParam', 'newCheckParam');
     });
@@ -217,7 +229,7 @@ describe('Main model', () => {
 
         model.set('triggerParam', triggerValue);
 
-        model.onChange('triggerParam', (newValue: string, oldValue: string) => {
+        model.onChange('triggerParam', (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
             assert(newValue === triggerValue);
             assert(oldValue === triggerValue);
         });
@@ -231,7 +243,7 @@ describe('Main model', () => {
 
         model.set('triggerParam', triggerValue);
 
-        model.onChange('triggerParam', (newValue: string, oldValue: string) => {
+        model.onChange('triggerParam', (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
             assert(newValue === triggerNewValue);
             assert(oldValue === triggerValue);
         });
@@ -246,7 +258,7 @@ describe('Main model', () => {
 
         model.set('triggerParam', triggerValue);
 
-        model.onChange('triggerParam', (newValue: string, oldValue: string) => {
+        model.onChange('triggerParam', (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
             assert(newValue === triggerNewValue);
             assert(oldValue === triggerOldValue);
         });
@@ -279,13 +291,14 @@ describe('Main model', () => {
 
         model.setValidation(
             'key',
-            (newValue: number, oldValue: number): boolean => newValue < 5,
-            (newValue: number, oldValue: number) => {
+            (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType): boolean =>
+                Number(newValue) < 5,
+            (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
                 assert(newValue === newValidValue);
                 assert(oldValue === undefined); // eslint-disable-line no-undefined
                 onValidRun += 1;
             },
-            (newValue: number, oldValue: number) => {
+            (newValue: MainModelTrigeredValueType, oldValue: MainModelTrigeredValueType) => {
                 assert(newValue === newInvalidValue);
                 assert(oldValue === newValidValue);
                 onInvalidRun += 1;
@@ -309,9 +322,9 @@ describe('Main model', () => {
         const otherModel = new MainModel();
 
         // eslint-disable-next-line lodash/prefer-noop
-        model.onChange('anyParam', (): {} => {});
+        model.onChange('anyParam', () => {});
         // eslint-disable-next-line lodash/prefer-noop
-        model.listenTo(otherModel, 'anyParam', (): {} => {});
+        model.listenTo(otherModel, 'anyParam', () => {});
 
         model.destroy();
 
