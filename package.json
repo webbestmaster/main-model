@@ -1,6 +1,6 @@
 {
   "name": "main-model",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Main Model",
   "directories": {
     "test": "test"
@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "nodemon src/index.js --exec babel-node",
-    "build": "babel --require babel-polyfill --require babel-core/register ./src -d ./dist",
+    "build": "babel --require babel-core/register ./src -d ./dist",
     "check": "npm run eslint; npm run flow;",
     "check:fix": "npm run prettier; npm run eslint:fix; npm run flow;",
     "eslint": "eslint .",
@@ -16,7 +16,7 @@
     "flow": "flow",
     "flow-stop": "flow stop",
     "prettier": "prettier --write \"./**/*.js\"",
-    "test": "mocha --require babel-core/register --require babel-polyfill"
+    "test": "mocha --require babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -36,7 +36,6 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-3": "^6.24.1",
