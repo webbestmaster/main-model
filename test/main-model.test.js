@@ -99,7 +99,6 @@ describe('Main model', () => {
         };
 
         model.listenTo(otherModel, 'keyValueChange', function onKeyValueChange() {
-            changeMyKey.key = 'keyValueChange';
             assert(this === model);
         });
 
