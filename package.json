@@ -1,6 +1,6 @@
 {
   "name": "main-model",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Main Model",
   "directories": {
     "test": "test"
@@ -49,10 +49,10 @@
     "eslint-plugin-no-use-extend-native": "^0.3.12",
     "eslint-plugin-optimize-regex": "^1.1.5",
     "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-react": "^7.10.0",
+    "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-sonarjs": "^0.1.0",
-    "eslint-plugin-unicorn": "^4.0.3",
-    "flow-bin": "^0.77.0",
+    "eslint-plugin-unicorn": "^5.0.0",
+    "flow-bin": "^0.78.0",
     "flow-typed": "^2.5.1",
     "mocha": "^5.2.0",
     "prettier": "^1.13.7"

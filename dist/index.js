@@ -33,12 +33,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} attributes of new MainModel instance
  * @return {MainModel} instance
  */
-
-
-// type AttrType = {
-// [key: string]: AttrTypeT
-// };
-
 var MainModel = function () {
     function MainModel(key, value) {
         (0, _classCallCheck3.default)(this, MainModel);
@@ -413,12 +407,6 @@ var MainModel = function () {
                 var args = [newValue, oldValue];
 
                 return (0, _apply2.default)(test, context, args) ? (0, _apply2.default)(onValid, context, args) : (0, _apply2.default)(onInvalid, context, args);
-
-                /*
-                        return test.apply(context, args) ?
-                            onValid.apply(context, args) :
-                            onInvalid.apply(context, args);
-                */
             }, context);
 
             return model;

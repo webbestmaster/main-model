@@ -8,10 +8,6 @@
 
 import {isNotFunction, isNotString, isNotUndefined, isNumber, isString} from './is';
 
-// type AttrType = {
-// [key: string]: AttrTypeT
-// };
-
 type ActionType<ValueType> = (newValue: ValueType | void, oldValue: ValueType | void) => mixed;
 
 type ListenersItemType<ValueType> = [ActionType<ValueType>, {}];
@@ -383,12 +379,6 @@ export default class MainModel<KeyNameType: string, ValueType> {
                 return Reflect.apply(test, context, args) ?
                     Reflect.apply(onValid, context, args) :
                     Reflect.apply(onInvalid, context, args);
-
-                /*
-                        return test.apply(context, args) ?
-                            onValid.apply(context, args) :
-                            onInvalid.apply(context, args);
-            */
             },
             context
         );
