@@ -74,7 +74,6 @@ describe('Main model', () => {
         };
 
         model.onChange('keyValueChange', function onKeyValueChange() {
-            changeMyKey.key = 'keyValueChange';
             assert(this === model);
         });
 
