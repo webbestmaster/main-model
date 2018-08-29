@@ -8,10 +8,6 @@
 
 import {isNotFunction, isNotString, isNotUndefined, isNumber, isString} from './is';
 
-// type AttrType = {
-// [key: string]: AttrTypeT
-// };
-
 type ActionType<ValueType> = (newValue: ValueType | void, oldValue: ValueType | void) => mixed;
 
 type ListenersItemType<ValueType> = [ActionType<ValueType>, {}];
@@ -163,7 +159,7 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         if (argsLength === 2) {
             allListeners[key] = listenersByKey.filter(
-                (listenerData: ListenersItemType<ValueType>): boolean => {
+                <ActionValueType: ValueType>(listenerData: ListenersItemType<ActionValueType>): boolean => {
                     return listenerData[0] !== action;
                 }
             );
@@ -172,7 +168,7 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         if (argsLength === 3) {
             allListeners[key] = listenersByKey.filter(
-                (listenerData: ListenersItemType<ValueType>): boolean => {
+                <ActionValueType: ValueType>(listenerData: ListenersItemType<ActionValueType>): boolean => {
                     return listenerData[0] !== action || listenerData[1] !== context;
                 }
             );
@@ -350,8 +346,7 @@ export default class MainModel<KeyNameType: string, ValueType> {
             newValueArg = newValue;
         }
 
-        // eslint-disable-next-line no-loops/no-loops
-        listeners.forEach((listenerData: ListenersItemType<ValueType>) => {
+        listeners.forEach(<ActionValueType: ValueType>(listenerData: ListenersItemType<ActionValueType>) => {
             Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]);
         });
 
@@ -460,3 +455,4 @@ export default class MainModel<KeyNameType: string, ValueType> {
     }
     */
 }
+
