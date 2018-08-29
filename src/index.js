@@ -8,6 +8,10 @@
 
 import {isNotFunction, isNotString, isNotUndefined, isNumber, isString} from './is';
 
+// type AttrType = {
+// [key: string]: AttrTypeT
+// };
+
 type ActionType<ValueType> = (newValue: ValueType | void, oldValue: ValueType | void) => mixed;
 
 type ListenersItemType<ValueType> = [ActionType<ValueType>, {}];
@@ -157,36 +161,22 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         const listenersByKey = model.getListenersByKey(key);
 
-        const filtered: Array<ListenersItemType<ValueType>> = [];
-
-        const listenerDataLength = listenersByKey.length;
-        let listenerDataIndex = 0;
-
         if (argsLength === 2) {
-            // eslint-disable-next-line no-loops/no-loops
-            for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
-                const listenerData: ListenersItemType<ValueType> = listenersByKey[listenerDataIndex];
-
-                if (listenerData[0] !== action) {
-                    filtered.push(listenerData);
+            allListeners[key] = listenersByKey.filter(
+                (listenerData: ListenersItemType<ValueType>): boolean => {
+                    return listenerData[0] !== action;
                 }
-            }
-
-            allListeners[key] = filtered;
+            );
             return model;
         }
 
         if (argsLength === 3) {
-            // eslint-disable-next-line no-loops/no-loops
-            for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
-                const listenerData: ListenersItemType<ValueType> = listenersByKey[listenerDataIndex];
-
-                if (listenerData[0] !== action || listenerData[1] !== context) {
-                    filtered.push(listenerData);
+            allListeners[key] = listenersByKey.filter(
+                (listenerData: ListenersItemType<ValueType>): boolean => {
+                    return listenerData[0] !== action || listenerData[1] !== context;
                 }
-            }
+            );
 
-            allListeners[key] = filtered;
             return model;
         }
 
@@ -236,10 +226,14 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         if (argsLength === 0) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
-                    KeyNameType,
-                    ActionType<ValueType>,
-                    {}>) => {
+                (
+                    listeningItem: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                        KeyNameType,
+                        ActionType<ValueType>,
+                        {}>
+                ) => {
+                    const [listMainModel, listKey, listAction, listContext] = listeningItem;
+
                     model.stopListening(listMainModel, listKey, listAction, listContext);
                 }
             );
@@ -248,10 +242,14 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         if (argsLength === 1) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
-                    KeyNameType,
-                    ActionType<ValueType>,
-                    {}>) => {
+                (
+                    listeningItem: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                        KeyNameType,
+                        ActionType<ValueType>,
+                        {}>
+                ) => {
+                    const [listMainModel, listKey, listAction, listContext] = listeningItem;
+
                     if (listMainModel === mainModel) {
                         model.stopListening(listMainModel, listKey, listAction, listContext);
                     }
@@ -262,10 +260,14 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         if (argsLength === 2) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
-                    KeyNameType,
-                    ActionType<ValueType>,
-                    {}>) => {
+                (
+                    listeningItem: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                        KeyNameType,
+                        ActionType<ValueType>,
+                        {}>
+                ) => {
+                    const [listMainModel, listKey, listAction, listContext] = listeningItem;
+
                     if (listMainModel === mainModel && listKey === key) {
                         model.stopListening(listMainModel, listKey, listAction, listContext);
                     }
@@ -276,10 +278,14 @@ export default class MainModel<KeyNameType: string, ValueType> {
 
         if (argsLength === 3) {
             listening.forEach(
-                ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
-                    KeyNameType,
-                    ActionType<ValueType>,
-                    {}>) => {
+                (
+                    listeningItem: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                        KeyNameType,
+                        ActionType<ValueType>,
+                        {}>
+                ) => {
+                    const [listMainModel, listKey, listAction, listContext] = listeningItem;
+
                     if (listMainModel === mainModel && listKey === key && listAction === action) {
                         model.stopListening(listMainModel, listKey, listAction, listContext);
                     }
@@ -289,10 +295,14 @@ export default class MainModel<KeyNameType: string, ValueType> {
         }
 
         model.listening = listening.filter(
-            ([listMainModel, listKey, listAction, listContext]: ListeningItemType<MainModel<KeyNameType, ValueType>,
-                KeyNameType,
-                ActionType<ValueType>,
-                {}>): boolean => {
+            (
+                listeningItem: ListeningItemType<MainModel<KeyNameType, ValueType>,
+                    KeyNameType,
+                    ActionType<ValueType>,
+                    {}>
+            ): boolean => {
+                const [listMainModel, listKey, listAction, listContext] = listeningItem;
+
                 if (
                     mainModel &&
                     listMainModel === mainModel &&
@@ -340,15 +350,10 @@ export default class MainModel<KeyNameType: string, ValueType> {
             newValueArg = newValue;
         }
 
-        const listenerDataLength = listeners.length;
-        let listenerDataIndex = 0;
-
         // eslint-disable-next-line no-loops/no-loops
-        for (; listenerDataIndex < listenerDataLength; listenerDataIndex += 1) {
-            const listenerData: ListenersItemType<ValueType> = listeners[listenerDataIndex];
-
+        listeners.forEach((listenerData: ListenersItemType<ValueType>) => {
             Reflect.apply(listenerData[0], listenerData[1], [newValueArg, oldValueArg]);
-        }
+        });
 
         return model;
     }
